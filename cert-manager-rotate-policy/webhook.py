@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 import base64
-from pprint import pprint
 
 admission_controller = Flask(__name__)
 
 @admission_controller.route('/validate/certificates', methods=['POST'])
 def deployment_webhook():
     request_info = request.get_json()
-    
+
     try:
         if request_info["request"]["object"]["spec"]["privateKey"].get("rotationPolicy") == "Always":
             return admission_response(True, "Private key always set to rotate")
