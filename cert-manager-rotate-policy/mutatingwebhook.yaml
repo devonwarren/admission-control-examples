@@ -1,0 +1,27 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: cert-manager-rotate-policy-webhook
+  namespace: cert-manager
+  labels:
+    component: mutating-controller
+webhooks:
+  - name: rotate-policy-webhook.devonwarren.dev
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: None
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: rotate-policy-webhook
+        namespace: cert-manager
+        path: /mutate/certificates
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURSVENDQWkyZ0F3SUJBZ0lSQUlqYytqWS9kakJEb01oQkdiaW1zYTh3RFFZSktvWklodmNOQVFFTEJRQXcKSURFZU1Cd0dBMVVFQXhNVmNtOTBZWFJsTFhCdmJHbGplUzEzWldKb2IyOXJNQjRYRFRJeE1EY3hPVEU1TVRNeQpOVm9YRFRJeE1UQXhOekU1TVRNeU5Wb3dJREVlTUJ3R0ExVUVBeE1WY205MFlYUmxMWEJ2YkdsamVTMTNaV0pvCmIyOXJNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXMyUmpMd2gxZ0lIaFhyU0wKVmluUFFsclZTS2Z2aWJQc1Q1M3dnTjdDcHZ6enVtckh6dklhUW9mb09Zb1FtUGhvbkJKcEJzY3JBazNUdXVLUwoxb0V3WGI2azY1OWYvT0pUbHNVMHZsU0JsOXpmKzFWUU81UnpXajZzbHp6MzNwUUdMYkJmS254VmVmaCtNcHhVClhHNlE5eGxOUGt2TjlwK1JjNEs5c3BYQmtjRnJibkdGKzdibGt5UE5nZEdVejgwTkQxQXAzeFBKQk1BL0UyQ2cKdFhjZHVsU3RxUWN2WkJHMXQ2MTFHQkZOdzZKM29Rd21vUFhEM25iOER0cjQ2ZSt0NTlyL1BLYy81ZnpROUVNVApIWXBjV3FHUXFRcEU4Y1h1aTJKVDZTTzdyM3dicmN1KzlIdEV0UG1sMmZ2MDBxZkkrbUdGdTZaZFBLaWRkbkZWCmtuZ1ROUUlEQVFBQm8zb3dlREFPQmdOVkhROEJBZjhFQkFNQ0JhQXdEQVlEVlIwVEFRSC9CQUl3QURCWUJnTlYKSFJFRVVUQlBnaVZ5YjNSaGRHVXRjRzlzYVdONUxYZGxZbWh2YjJzdVpHVjJiMjUzWVhKeVpXNHVaR1YyZ2laeQpiM1JoZEdVdGNHOXNhV041TFhkbFltaHZiMnN1WTJWeWRDMXRZVzVoWjJWeUxuTjJZekFOQmdrcWhraUc5dzBCCkFRc0ZBQU9DQVFFQVQ5ZjgrTHJVUzRDOC80cmw0QVNsalQvUjUwT3p3eVVsc0l1MkNSc05pUkJIaks2cnM1UU4KVzdOdlJ5eDAwTzRldm5hVG1FaGJuMEttRGZPRDM0UEplV3BtZHc5dW5wQU5UN3hvZ1ZHdTFlTktKRGpWZmpyVApBTFUvc1FTU1E3YkRWSDZxMXFtRVVjL0tvZWxlbVNEQ3hFTGx2SjRnRnZjVk53bXhnQnE5UHU0djQ4WCtFNU41CjV4Q01tNDVvRHdIT2YrN0JmaXRTRmNQNVZvUTZXTlFvSHFWOU95RDdDTERHTU5TNnljamMyYStOWC9uWllxeTcKNGhjK0NRQ1JPSWloMW1aK0svSDlMaWkvcmdqcXpnVEwvVXVIS3Fub1hrQ0JvTVFLeDY3MUhxMlhXRUF5SmtjUwpWM1pCTVNuVVYzdHMzU01LMEkvbk1uQWZpdTVsRHJNRCtBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    rules:
+      - apiGroups: ["cert-manager.io"]
+        resources:
+          - "certificates"
+        apiVersions:
+          - "*"
+        operations:
+          - CREATE
+          - UPDATE

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rotate-policy-webhook
+  namespace: cert-manager
+  labels:
+    app: rotate-policy-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rotate-policy-webhook
+  template:
+    metadata:
+      labels:
+        app: rotate-policy-webhook
+    spec:
+      containers:
+      - name: rotate-policy-webhook
+        image: devonwarren/rotate-policy-webhook:latest
+        ports:
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: 600m
+            memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rotate-policy-webhook
+  namespace: cert-manager
+spec:
+  selector:
+    app: rotate-policy-webhook
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443

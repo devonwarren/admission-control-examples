@@ -1,0 +1,3 @@
+Flask==2.0.1
+jsonify==0.5
+jsonpatch==1.32
