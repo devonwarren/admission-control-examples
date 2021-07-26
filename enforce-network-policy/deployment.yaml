@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enforce-default-network-policy-webhook
+  namespace: kube-system
+  labels:
+    app: enforce-default-network-policy-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enforce-default-network-policy-webhook
+  template:
+    metadata:
+      labels:
+        app: enforce-default-network-policy-webhook
+    spec:
+      containers:
+      - name: enforce-default-network-policy-webhook
+        image: devonwarren/enforce-network-policy-webhook:latest
+        ports:
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: 600m
+            memory: 1Gi
+        volumeMounts:
+        - name: certificate
+          mountPath: /app/ssl
+          readOnly: true
+        env:
+        - name: DEBUG
+          value: "true"
+        - name: ALLOWED_USER
+          value: "system:serviceaccount:kube-system:namespace-controller"
+      volumes:
+      - name: certificate
+        secret:
+          secretName: networkpolicy-webhook-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enforce-default-network-policy-webhook
+  namespace: kube-system
+spec:
+  selector:
+    app: enforce-default-network-policy-webhook
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443

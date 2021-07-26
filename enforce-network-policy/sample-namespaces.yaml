@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app1
+  labels:
+    security-exempt: "false"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: internal-system-stuff
+  labels:
+    security-exempt: "true"

@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: enforce-default-network-policy-webhook
+  namespace: kube-system
+  annotations:
+    cert-manager.io/inject-ca-from: kube-system/networkpolicy-webhook-tls
+webhooks:
+  - name: enforce-default-network-policy-webhook.cluster.local
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: None
+    failurePolicy: Fail
+    namespaceSelector:
+      matchLabels:
+        security-exempt: "false"
+    clientConfig:
+      service:
+        name: enforce-default-network-policy-webhook
+        namespace: kube-system
+        path: /validate/network-policy
+    rules:
+      - apiGroups: ["networking.k8s.io"]
+        resources:
+          - "networkpolicies"
+        apiVersions:
+          - "*"
+        operations:
+          - UPDATE
+          - DELETE
+    

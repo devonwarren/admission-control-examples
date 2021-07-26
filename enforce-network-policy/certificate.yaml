@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: networkpolicy-webhook-tls
+  namespace: kube-system
+spec:
+  secretName: networkpolicy-webhook-tls
+  privateKey:
+    rotationPolicy: Always
+  commonName: enforce-default-network-policy-webhook.cluster.local
+  dnsNames:
+    - enforce-default-network-policy-webhook.cluster.local
+    - enforce-default-network-policy-webhook.kube-system.svc
+  issuerRef:
+    name: main-issuer
+    kind: ClusterIssuer
