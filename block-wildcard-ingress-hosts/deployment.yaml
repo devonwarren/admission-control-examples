@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: block-wildcard-ingress-webhook
+  namespace: kube-system
+  labels:
+    app: block-wildcard-ingress-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: block-wildcard-ingress-webhook
+  template:
+    metadata:
+      labels:
+        app: block-wildcard-ingress-webhook
+    spec:
+      containers:
+      - name: block-wildcard-ingress-webhook
+        image: devonwarren/block-wildcard-ingress-webhook:latest
+        ports:
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: 600m
+            memory: 1Gi
+        env:
+        - name: DEBUG
+          value: "true"
+        volumeMounts:
+        - name: certificate
+          mountPath: /app/ssl
+          readOnly: true
+      volumes:
+      - name: certificate
+        secret:
+          secretName: block-wildcard-ingress-webhook-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: block-wildcard-ingress-webhook
+  namespace: kube-system
+spec:
+  selector:
+    app: block-wildcard-ingress-webhook
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443

@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: block-wildcard-ingress-webhook-tls
+  namespace: kube-system
+spec:
+  secretName: block-wildcard-ingress-webhook-tls
+  privateKey:
+    rotationPolicy: Always
+  commonName: block-wildcard-ingress-webhook.cluster.local
+  dnsNames:
+    - block-wildcard-ingress-webhook.cluster.local
+    - block-wildcard-ingress-webhook.kube-system.svc
+  issuerRef:
+    name: main-issuer
+    kind: ClusterIssuer
