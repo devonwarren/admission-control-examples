@@ -5,8 +5,10 @@ metadata:
   namespace: cert-manager
   labels:
     component: mutating-controller
+  annotations:
+    cert-manager.io/inject-ca-from: kube-system/rotate-policy-webhook-tls
 webhooks:
-  - name: rotate-policy-webhook.devonwarren.dev
+  - name: rotate-policy-webhook.cluster.local
     admissionReviewVersions: ["v1beta1"]
     sideEffects: None
     failurePolicy: Fail

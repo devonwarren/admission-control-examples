@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rotate-policy-webhook-tls
+  namespace: kube-system
+spec:
+  secretName: rotate-policy-webhook-tls
+  privateKey:
+    rotationPolicy: Always
+  commonName: rotate-policy-webhook.cluster.local
+  dnsNames:
+    - rotate-policy-webhook.cluster.local
+    - rotate-policy-webhook.kube-system.svc
+  issuerRef:
+    name: main-issuer
+    kind: ClusterIssuer

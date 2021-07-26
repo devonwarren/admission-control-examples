@@ -24,6 +24,17 @@ spec:
           limits:
             cpu: 600m
             memory: 1Gi
+        env:
+        - name: DEBUG
+          value: "true"
+        volumeMounts:
+        - name: certificate
+          mountPath: /app/ssl
+          readOnly: true
+      volumes:
+      - name: certificate
+        secret:
+          secretName: rotate-policy-webhook-tls
 ---
 apiVersion: v1
 kind: Service

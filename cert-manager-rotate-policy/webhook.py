@@ -51,4 +51,9 @@ def deployment_webhook_mutate():
                                  "patch": base64_patch}})
 
 if __name__ == '__main__':
-    admission_controller.run(host='0.0.0.0', port=443, ssl_context=("/app/server.crt", "/app/server.key"))
+    # if debug is set in deployment env, set that at runtime
+    debug = False
+    if getenv("DEBUG", "false").lower() == "true":
+        debug = True
+    
+    admission_controller.run(host='0.0.0.0', port=443, ssl_context=("/app/ssl/tls.crt", "/app/ssl/tls.key"), debug=debug)
