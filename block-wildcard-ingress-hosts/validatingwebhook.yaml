@@ -10,9 +10,6 @@ webhooks:
     admissionReviewVersions: ["v1beta1"]
     sideEffects: None
     failurePolicy: Fail
-    namespaceSelector:
-      matchLabels:
-        prm.managed: "true"
     clientConfig:
       service:
         name: block-wildcard-ingress-webhook
